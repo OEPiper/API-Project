@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       }
-    });
+    },options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = "SpotImages";
