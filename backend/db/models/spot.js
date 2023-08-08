@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model, 
+  Model, User 
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Spot.hasMany(
+        models.SpotImage,
+        {foreignKey: 'spotId', onDelete: 'CASCADE', hooks: true}
+      )
       Spot.belongsTo(
         models.User,
       );
