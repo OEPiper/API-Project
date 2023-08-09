@@ -39,7 +39,7 @@ router.get('/current', requireAuth, async(req, res) => {
     
     delete spot.SpotImages
   })
-  res.json(spotsList)
+  res.json({Spots:spotsList})
 })
   
   
@@ -98,7 +98,7 @@ router.get('/', async(req,res) => {
       
       delete spot.SpotImages
     })
-    res.json(spotsList)
+    res.json({Spots:spotsList})
 })
 
 module.exports = router;
