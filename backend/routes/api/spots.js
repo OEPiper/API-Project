@@ -155,7 +155,12 @@ router.get('/current', requireAuth, async(req, res) => {
     })
     let starAvg = starSum/spot.Reviews.length;
     spot.avgRating = starAvg
-    spot.previewImage = spot.SpotImages[0].url
+    if(spot.SpotImages.length > 0){
+      for(let image of spot.SpotImages){
+        if(image.preview == true)
+        spot.previewImage = image.url
+      }
+    }
     delete spot.Reviews
     
     delete spot.SpotImages
@@ -215,7 +220,10 @@ router.get('/', async(req,res) => {
       let starAvg = starSum/spot.Reviews.length;
       spot.avgRating = starAvg
       if(spot.SpotImages.length > 0){
-      spot.previewImage = spot.SpotImages[0].url
+        for(let image of spot.SpotImages){
+          if(image.preview == true)
+          spot.previewImage = image.url
+      }
       };
       delete spot.Reviews
       
