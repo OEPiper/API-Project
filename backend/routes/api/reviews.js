@@ -34,7 +34,7 @@ router.get('/current', requireAuth, async(req,res) => {
         }
         delete spot.SpotImages
     })
-    res.json(reviewList)   
+    res.json({Reviews:reviewList})   
 })
 
 module.exports = router;
