@@ -39,6 +39,44 @@ const validateSpot = [
     .withMessage("Price per day is required"),
   handleValidationErrors
 ];
+const validateReview = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .withMessage('Review text is required'),
+  check('stars')
+    .exists({ checkFalsy: true })
+    .isInt({min:1, max:5})
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+
+router.post('/:spotId/reviews', validateReview, requireAuth, async(req,res) => {
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
+  const spot = await Spot.findByPk(spotId);
+  if(!spot) {
+    res.status(404);
+    return res.json({message: "Spot could't be found"})
+  }
+  const reviews = await Review.findAll({
+    where:{
+      spotId: parseInt(spotId),
+      userId: userId
+    }
+  })
+  if(reviews.length > 0){
+    res.status(500);
+    return res.json({message: 'User already has a review for this spot'})
+  }
+  const newReview = await Review.create({
+    userId: userId,
+    spotId: parseInt(spotId),
+    review: "This was an awesome spot!",
+    stars: 5
+  })
+
+  res.json(newReview)
+})
 
 router.get('/:spotId/reviews', async(req,res) => {
   const spotId = req.params.spotId;
