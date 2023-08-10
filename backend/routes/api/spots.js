@@ -39,6 +39,64 @@ const validateSpot = [
     .withMessage("Price per day is required"),
   handleValidationErrors
 ];
+const validateReview = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .withMessage('Review text is required'),
+  check('stars')
+    .exists({ checkFalsy: true })
+    .isInt({min:1, max:5})
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+
+router.post('/:spotId/reviews', validateReview, requireAuth, async(req,res) => {
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
+  const {review, stars} = req.body
+  const spot = await Spot.findByPk(spotId);
+  if(!spot) {
+    res.status(404);
+    return res.json({message: "Spot could't be found"})
+  }
+  const reviews = await Review.findAll({
+    where:{
+      spotId: parseInt(spotId),
+      userId: userId
+    }
+  })
+  if(reviews.length > 0){
+    res.status(500);
+    return res.json({message: 'User already has a review for this spot'})
+  }
+  const newReview = await Review.create({
+    userId: userId,
+    spotId: parseInt(spotId),
+    review: review,
+    stars: stars
+  })
+
+  res.json(newReview)
+})
+
+router.get('/:spotId/reviews', async(req,res) => {
+  const spotId = req.params.spotId;
+  const spot = await Spot.findByPk(spotId);
+  if(!spot){
+    res.status(404);
+    return res.json({message: "Spot couldn't be found"})
+  }
+  const reviews = await Review.findAll({
+    where: {
+      spotId: spotId
+    },
+    include: [
+      {model: User, attributes: ['id', 'firstName', 'lastName']},
+      {model: ReviewImage, attributes: ['id', 'url']}
+    ]
+  })
+  res.json({Reviews:reviews})
+})
 
 router.delete('/:spotId', requireAuth, async(req, res) => {
   const spotId = req.params.spotId;
@@ -155,7 +213,12 @@ router.get('/current', requireAuth, async(req, res) => {
     })
     let starAvg = starSum/spot.Reviews.length;
     spot.avgRating = starAvg
-    spot.previewImage = spot.SpotImages[0].url
+    if(spot.SpotImages.length > 0){
+      for(let image of spot.SpotImages){
+        if(image.preview == true)
+        spot.previewImage = image.url
+      }
+    }
     delete spot.Reviews
     
     delete spot.SpotImages
@@ -215,7 +278,10 @@ router.get('/', async(req,res) => {
       let starAvg = starSum/spot.Reviews.length;
       spot.avgRating = starAvg
       if(spot.SpotImages.length > 0){
-      spot.previewImage = spot.SpotImages[0].url
+        for(let image of spot.SpotImages){
+          if(image.preview == true)
+          spot.previewImage = image.url
+      }
       };
       delete spot.Reviews
       
