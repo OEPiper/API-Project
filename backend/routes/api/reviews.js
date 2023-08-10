@@ -19,6 +19,22 @@ const validateReview = [
     handleValidationErrors
   ];
 
+router.delete('/:reviewId', requireAuth, async(req,res) => {
+    const reviewId = req.params.reviewId;
+    const userId = req.user.id;
+    const deleteReview = await Review.findByPk(reviewId);
+    if(!deleteReview){
+        res.status(404);
+        return res.json({message: "Review couldn't be found"})
+    }
+    if(deleteReview.userId !== userId){
+        res.status(404)
+        return res.json({message: 'Forbidden'})
+    }
+    await deleteReview.destroy();
+    res.json({message: 'Successfully deleted'})
+})
+
 router.put('/:reviewId', validateReview, requireAuth, async(req,res) => {
     const reviewId = req.params.reviewId;
     const userId = req.user.id;
@@ -28,7 +44,7 @@ router.put('/:reviewId', validateReview, requireAuth, async(req,res) => {
         res.status(404);
         return res.json({message: "Review couldn't be found"})
     }
-    if(review.userId === userId){
+    if(updatedReview.userId !== userId){
         res.status(403);
         return res.json({message: 'Forbidden'})
     };
