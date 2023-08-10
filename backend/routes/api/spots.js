@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { Spot, User, Review, ReviewImage, SpotImage } = require('../../db/models');
+const { Spot, User, Review, ReviewImage, SpotImage, Booking } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
@@ -49,6 +49,34 @@ const validateReview = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+
+router.get('/:spotId/bookings', requireAuth, async(req,res) => {
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
+  const spot = await Spot.findByPk(spotId);
+  if(!spot){
+    res.status(404);
+    return res.json({message: "Spot couldn't be found"})
+  }
+  if(spot.ownerId === userId){
+    let bookings = await Booking.findAll({
+      where:{
+        spotId: parseInt(spotId)
+      },
+      include: {model: User, attributes: ['id', 'firstName', 'lastName']}
+    })
+    return res.json({Bookings: bookings})
+  }
+  if(spot.ownerId !== userId){
+    let bookings = await Booking.findAll({
+      where:{
+        spotId: parseInt(spotId)
+      },
+      attributes: ['spotId', 'startDate', 'endDate']
+    })
+    return res.json({Bookings: bookings})
+  }
+})
 
 router.post('/:spotId/reviews', validateReview, requireAuth, async(req,res) => {
   const spotId = req.params.spotId;
