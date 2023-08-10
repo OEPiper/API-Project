@@ -40,6 +40,33 @@ const validateSpot = [
   handleValidationErrors
 ];
 
+router.put('/:spotId', validateSpot, requireAuth, async(req,res) => {
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
+  const {address, city, state, country, lat, lng, name, description, price} = req.body;
+  let updatedSpot = await Spot.findByPk(spotId);
+  if(updatedSpot.ownerId !== userId){
+    res.status(403);
+    return res.json({message: 'Forbidden'});
+  };
+  if(!updatedSpot){
+    res.status(404);
+    return res.json({message: "Spot couldn't be found"})
+  };
+  if(address) updatedSpot.address = address;
+  if(city) updatedSpot.city = city;
+  if(state) updatedSpot.state = state;
+  if(country) updatedSpot.country = country;
+  if(lat) updatedSpot.lat = lat;
+  if(lng) updatedSpot.lng = lng;
+  if(name) updatedSpot.name = name;
+  if(description) updatedSpot.description = description;
+  if(price) updatedSpot.price = price;
+
+  await updatedSpot.save();
+  res.json(updatedSpot);
+})
+
 router.post('/:spotId/images', requireAuth, async(req, res) => {
   const {url, preview} = req.body
   const spotId = req.params.spotId;
@@ -171,7 +198,9 @@ router.get('/', async(req,res) => {
       })
       let starAvg = starSum/spot.Reviews.length;
       spot.avgRating = starAvg
+      if(spot.SpotImages.length > 0){
       spot.previewImage = spot.SpotImages[0].url
+      };
       delete spot.Reviews
       
       delete spot.SpotImages
