@@ -8,6 +8,37 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
+const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .isInt({min:1, max:5})
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
+router.put('/:reviewId', validateReview, requireAuth, async(req,res) => {
+    const reviewId = req.params.reviewId;
+    const userId = req.user.id;
+    const {review, stars} = req.body
+    let updatedReview = await Review.findByPk(reviewId);
+    if(!updatedReview) {
+        res.status(404);
+        return res.json({message: "Review couldn't be found"})
+    }
+    if(review.userId === userId){
+        res.status(403);
+        return res.json({message: 'Forbidden'})
+    };
+    if(review) updatedReview.review = review;
+    if(stars) updatedReview.stars = stars;
+    await updatedReview.save()
+    res.json(updatedReview)
+    
+})
+
 router.post('/:reviewId/images', requireAuth, async(req,res) =>{
     const reviewId = req.params.reviewId;
     const userId = req.user.id;

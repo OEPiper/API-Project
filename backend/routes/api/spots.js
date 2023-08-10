@@ -53,6 +53,7 @@ const validateReview = [
 router.post('/:spotId/reviews', validateReview, requireAuth, async(req,res) => {
   const spotId = req.params.spotId;
   const userId = req.user.id;
+  const {review, stars} = req.body
   const spot = await Spot.findByPk(spotId);
   if(!spot) {
     res.status(404);
@@ -71,8 +72,8 @@ router.post('/:spotId/reviews', validateReview, requireAuth, async(req,res) => {
   const newReview = await Review.create({
     userId: userId,
     spotId: parseInt(spotId),
-    review: "This was an awesome spot!",
-    stars: 5
+    review: review,
+    stars: stars
   })
 
   res.json(newReview)
