@@ -50,6 +50,70 @@ const validateReview = [
   handleValidationErrors
 ];
 
+
+router.post('/:spotId/bookings', requireAuth, async(req,res) =>{
+  const spotId = req.params.spotId;
+  const userId = req.user.id;
+  const {startDate, endDate} = req.body;
+  let errors = {}
+  const spot = await Spot.findByPk(spotId);
+  if(!spot) {
+    res.status(404);
+    return res.json({message: "Spot couldn't be found"})
+  }
+  if(spot.ownerId === userId){
+    res.status(403);
+    return res.json({message: 'Forbidden'})
+  }
+  const startTime = new Date(startDate).getTime();
+  const endTime =  new Date(endDate).getTime();
+  if(startTime >= endTime) {
+    res.status(400);
+    return res.json({
+      "message": "Bad Request",
+      "errors": {
+        "endDate": "endDate cannot be on or before startDate"
+      }
+    })
+  }
+  let bookings = await Booking.findAll({
+    where: {spotId: parseInt(spotId)}
+  })
+  let bookingsList = [];
+  bookings.forEach((booking) => {
+    bookingsList.push(booking.toJSON())
+  });
+  bookingsList.forEach((booking) => {
+    //let start = booking.startDate.toDateString();
+    let bookingStartTime = booking.startDate.getTime();
+    
+    // let end = booking.endDate.toDateString();
+    let bookingEndTime = booking.endDate.getTime();
+    if(startTime >= bookingStartTime && startTime <= bookingEndTime){
+      errors.startDate = "Start date conflicts with an existing booking"
+    }
+    if(endTime >= bookingStartTime && endTime <= bookingEndTime){
+      errors.endDate = "End date conflicts with an existing booking"
+    }
+  
+  })
+  if(Object.keys(errors).length > 0){
+    res.status(403);
+    return res.json({
+      message: 'Sorry, this spot is already booked for the specified dates',
+      errors: errors
+    })
+  }
+  const newBooking = await Booking.create({
+    spotId: parseInt(spotId),
+    userId: userId,
+    startDate: new Date(startDate),
+    endDate: new Date(endDate)
+  })
+
+  res.json(newBooking)
+})
+
 router.get('/:spotId/bookings', requireAuth, async(req,res) => {
   const spotId = req.params.spotId;
   const userId = req.user.id;
