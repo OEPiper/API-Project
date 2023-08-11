@@ -49,6 +49,41 @@ const validateReview = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+const validateQuery = [
+  check('page')
+    .optional()
+    .isInt({min:1, max:10})
+    .withMessage("Page must be greater than or equal to 1"),
+  check('size')
+    .optional()
+    .isInt({min:1, max:20})
+    .withMessage("Size must be greater than or equal to 1"),
+  check('minLat')
+    .optional()
+    .isDecimal()
+    .withMessage('Minimum latitude is invalid'),
+  check('maxLat')
+    .optional()
+    .isDecimal()
+    .withMessage("Maximum latitude is invalid"),
+  check('minLng')
+    .optional()
+    .isDecimal()
+    .withMessage("Minimum longitude is invalid"),
+  check('maxLng')
+    .optional()
+    .isDecimal()
+    .withMessage("Maximum longitude is invalid"),
+  check('minPrice')
+    .optional()
+    .isDecimal({min: 0})
+    .withMessage("Minimum price must be greater than or equal to 0"),
+  check('maxPrice')
+    .optional()
+    .isDecimal({min: 0})
+    .withMessage("Maximum price must be greater than or equal to 0"),
+  handleValidationErrors
+];
 
 
 router.post('/:spotId/bookings', requireAuth, async(req,res) =>{
@@ -349,13 +384,33 @@ router.get('/:spotId', async(req,res) => {
       
 })
 
-router.get('/', async(req,res) => {
+router.get('/', validateQuery, async(req,res) => {
+  where = {}
+  let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+  if(!page) page = 1;
+  if(!size) size = 20;
+  page = parseInt(page);
+  size = parseInt(size);
+
+  let pagination = {};
+  if(page >= 1 && size >= 1){
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+  }
+  if(minLat) where.lat = {[Op.gte]: minLat};
+  if(maxLat) where.lat = {[Op.lte]: maxLat};
+  if(minLng) where.lng = {[Op.gte]: minLng};
+  if(maxLng) where.lng = {[Op.lte]: maxLng};
+  if(minPrice) where.price = {[Op.gte]: minPrice};
+  if(maxPrice) where.price = {[Op.lte]: maxPrice};
     const spots = await Spot.findAll({
+      where,
       include:[{
         model: Review
       }, {
         model: SpotImage
-      }]
+      }],
+      ...pagination
     });
 
     let spotsList = [];
@@ -375,6 +430,8 @@ router.get('/', async(req,res) => {
           spot.previewImage = image.url
       }
       };
+      spot.page = page;
+      spot.size = size;
       delete spot.Reviews
       
       delete spot.SpotImages
