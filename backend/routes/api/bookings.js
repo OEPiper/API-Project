@@ -8,6 +8,29 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
+router.delete('/:bookingId', requireAuth, async(req,res) => {
+    const bookingId = req.params.bookingId;
+    const userId = req.user.id;
+    const deleteBooking = await Booking.findByPk(bookingId);
+    if(!deleteBooking) {
+        res.status(404);
+        return res.json({message: "Booking couldn't be found"})
+    }
+    const spot = await Spot.findByPk(deleteBooking.spotId);
+    if(deleteBooking.userId !== userId && spot.ownerId !== userId){
+        res.status(403);
+        return res.json({message: "Forbidden"})
+    }
+    let rightNow = Date.now();
+    const startTime = deleteBooking.startDate.getTime();
+    if(rightNow > startTime){
+        res.status(403);
+        return res.json({message: "Bookings that have been started can't be deleted"})
+    }
+    await deleteBooking.destroy()
+    res.json({message: "Successfully deleted"})
+})
+
 router.put('/:bookingId', requireAuth, async(req,res) => {
     const bookingId = req.params.bookingId;
     const userId = req.user.id;
