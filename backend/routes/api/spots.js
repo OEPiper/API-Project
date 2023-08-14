@@ -246,13 +246,13 @@ router.put('/:spotId', validateSpot, requireAuth, async(req,res) => {
   const userId = req.user.id;
   const {address, city, state, country, lat, lng, name, description, price} = req.body;
   let updatedSpot = await Spot.findByPk(spotId);
-  if(updatedSpot.ownerId !== userId){
-    res.status(403);
-    return res.json({message: 'Forbidden'});
-  };
   if(!updatedSpot){
     res.status(404);
     return res.json({message: "Spot couldn't be found"})
+  };
+  if(updatedSpot.ownerId !== userId){
+    res.status(403);
+    return res.json({message: 'Forbidden'});
   };
   if(address) updatedSpot.address = address;
   if(city) updatedSpot.city = city;
