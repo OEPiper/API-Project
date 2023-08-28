@@ -31,6 +31,18 @@ module.exports = {
       name: "App Academy",
       description: "Place where web developers are created",
       price: 123,
+    },
+    {
+      ownerId: 2,
+      address: "670 Trabert Ave",
+      city: "Atlanta",
+      state: "Georgia",
+      country: "United States of America",
+      lat: 45.7645358,
+      lng: -200.4730327,
+      name: "Monday Night Brewing",
+      description: "Place where Beer is created",
+      price: 250,
     }
    ])
   },
