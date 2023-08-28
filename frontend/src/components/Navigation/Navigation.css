@@ -1,0 +1,13 @@
+ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: none;
+}
+
+ul li ul{
+    display:flex;
+    flex-direction: column;
+}

@@ -1,0 +1,10 @@
+.spot-list {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.spot-img {
+    display: flex;
+    width: 450px;
+    height: 450px;
+}
