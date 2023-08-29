@@ -1,0 +1,11 @@
+.feature-img {
+    display: flex;
+    width: 400px;
+
+}
+
+.extra-img {
+    display: flex;
+    height: 400px;
+    width: 400px;
+}

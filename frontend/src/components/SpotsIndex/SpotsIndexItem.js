@@ -18,7 +18,7 @@ const SpotIndexItem = ({spot}) => {
         <li>
             <img className='spot-img' src={spot.previewImage} />
             <p>{spot.city}, {spot.state}</p>
-            <p>{spot.avgRating}</p>
+            <p><i class="fa-solid fa-star"></i>{spot.avgRating}</p>
             <p>${spot.price} per night</p>
         </li>
     )

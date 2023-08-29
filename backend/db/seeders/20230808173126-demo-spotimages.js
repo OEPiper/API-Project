@@ -30,6 +30,11 @@ module.exports = {
       url: "https://mondaynightbrewing.com/wp-content/uploads/2023/01/west-midtown-edited-1-jpg.webp",
       preview: true
     },
+    {
+      spotId: 1,
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Sleeping_Beauty_Castle_2019.jpg/1200px-Sleeping_Beauty_Castle_2019.jpg',
+      preview: false
+    }
 
    ])
   },
