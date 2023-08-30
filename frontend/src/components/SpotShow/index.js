@@ -36,6 +36,7 @@ const SpotShow = () => {
     if(spot.numReviews === 0){
         newReview = 'Be the first to post a review!'
     }
+    const extraImages = spot.SpotImages.slice(1)
    
     return (
         <div>
@@ -45,7 +46,7 @@ const SpotShow = () => {
                 <img className='feature-img' src={spot.SpotImages[0].url}/> 
                 <ul>
 
-                {spot.SpotImages.map((image) =>(
+                {extraImages.map((image) =>(
                     <li>
                     <img className='extra-img' src={image.url}/> 
                     </li>

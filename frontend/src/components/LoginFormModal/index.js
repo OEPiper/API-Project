@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { Link, useHistory } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -15,7 +17,7 @@ function LoginFormModal() {
     e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(closeModal())
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -23,6 +25,15 @@ function LoginFormModal() {
         }
       });
   };
+
+  const demoUser = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.login({credential: 'Demo-lition', password: 'password'})
+    ).then(() =>{
+      closeModal();
+      history.push('/')
+    })
+  }
 
   return (
     <>
@@ -50,6 +61,9 @@ function LoginFormModal() {
           <p>{errors.credential}</p>
         )}
         <button type="submit">Log In</button>
+        <Link onClick={demoUser}>
+          Demo User
+        </Link>
       </form>
     </>
   );
