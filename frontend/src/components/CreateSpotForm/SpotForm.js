@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createSpot } from '../../store/spots';
+import { createSpot, updateSpot } from '../../store/spots';
 import { postImage } from '../../store/spotImages';
 
 
@@ -17,11 +17,11 @@ const SpotForm = ({ spot, formType }) => {
   const [description, setDescription] = useState(spot?.description);
   const [name, setName] = useState(spot?.name);
   const [price, setPrice] = useState(spot?.price)
-  const [previewImgUrl, setPreviewImageUrl] = useState('')
-  const [imageUrl1, setImageUrl1] = useState('')
-  const [imageUrl2, setImageUrl2] = useState('')
-  const [imageUrl3, setImageUrl3] = useState('')
-  const [imageUrl4, setImageUrl4] = useState('')
+  const [previewImgUrl, setPreviewImageUrl] = useState(spot?.SpotImages[0].url)
+  const [imageUrl1, setImageUrl1] = useState(spot?.SpotImages[1]?.url)
+  const [imageUrl2, setImageUrl2] = useState(spot?.SpotImages[2]?.url)
+  const [imageUrl3, setImageUrl3] = useState(spot?.SpotImages[3]?.url)
+  const [imageUrl4, setImageUrl4] = useState(spot?.SpotImages[4]?.url)
   const [preview, setPreview] = useState(false)
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -41,28 +41,41 @@ const SpotForm = ({ spot, formType }) => {
         description, 
         name, 
         price};
-    
+    if(formType === 'Create a Spot'){
       const newSpot = await dispatch(createSpot(spot));
+      //console.log('newSpot', newSpot)
       spot = newSpot;
+      if(!previewImgUrl){
+        spot.errors.previewImage = 'Preview image is required'
+      }
+      if (spot.errors) {
+        console.log('errors',spot.errors)
+        setErrors(spot.errors);
+      } else {
       if(!spot.id){
-          return null
+        return null
       }
       const newPreview = await dispatch(postImage(spot.id, previewImgUrl, true))
       const newImage1 = await dispatch(postImage(spot.id, imageUrl1, false))
       const newImage2 = await dispatch(postImage(spot.id, imageUrl2, false))
       const newImage3 = await dispatch(postImage(spot.id, imageUrl3, false))
       const newImage4 = await dispatch(postImage(spot.id, imageUrl4, false))
-
-    console.log(spot.errors)
-    if (spot.errors) {
-      setErrors(spot.errors);
-    } else {
+        history.push(`/spots/${spot.id}`);
+      }
+    }else if(formType === 'Update your Spot'){
+      const updatedSpot = await dispatch(updateSpot(spot));
       history.push(`/spots/${spot.id}`);
     }
-  };
+      
+    };
 
   
-    let submitText = 'Create Spot'
+    let submitText
+    if(formType === 'Create a Spot'){
+      submitText = 'Create Spot'
+    }else{
+      submitText = 'Update Spot'
+    }
   
   return (
     <form onSubmit={handleSubmit}>
@@ -170,6 +183,7 @@ const SpotForm = ({ spot, formType }) => {
             placeholder='Preview Image URL'
             onChange={(e) => setPreviewImageUrl(e.target.value)}
             />
+            {errors.previewImage && <p>{errors.previewImage}</p>}
             <input
             value={imageUrl1}
             type='text'

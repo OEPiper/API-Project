@@ -36,14 +36,22 @@ const SpotShow = () => {
     if(spot.numReviews === 0){
         newReview = 'Be the first to post a review!'
     }
-    const extraImages = spot.SpotImages.slice(1)
+    const previewImage = spot.SpotImages.find((image)=> image.preview === true)
+    let previewIndex = spot.SpotImages.indexOf(previewImage)
+    let extraImages = []
+    for( let i = 0; i < spot.SpotImages.length; i++){
+        if(spot.SpotImages[i].preview === false && spot.SpotImages[i].url){
+            extraImages.push(spot.SpotImages[i])
+        }
+    }
+    console.log(extraImages)
    
     return (
         <div>
             <h1>{spot.name}</h1>
             <p>{spot.city}, {spot.state}, {spot.country}</p>
             <div>
-                <img className='feature-img' src={spot.SpotImages[0].url}/> 
+                <img className='feature-img' src={previewImage.url}/> 
                 <ul>
 
                 {extraImages.map((image) =>(
