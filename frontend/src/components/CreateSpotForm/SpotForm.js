@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createSpot, updateSpot } from '../../store/spots';
@@ -22,46 +22,74 @@ const SpotForm = ({ spot, formType }) => {
   const [imageUrl2, setImageUrl2] = useState(spot?.SpotImages[2]?.url)
   const [imageUrl3, setImageUrl3] = useState(spot?.SpotImages[3]?.url)
   const [imageUrl4, setImageUrl4] = useState(spot?.SpotImages[4]?.url)
-  const [preview, setPreview] = useState(false)
+  const [noPreviewImgUrl, setNoPreviewImgUrl] = useState(false);
+  const [imageFormat, setImageFormat] = useState(false);
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   
-
+ 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     spot = { 
-        ...spot,
-        country, 
-        address, 
-        city, 
-        state, 
-        lat, 
-        lng, 
-        description, 
-        name, 
-        price};
-    if(formType === 'Create a Spot'){
-      const newSpot = await dispatch(createSpot(spot));
-      //console.log('newSpot', newSpot)
-      spot = newSpot;
-      if(!previewImgUrl){
-        spot.errors.previewImage = 'Preview image is required'
-      }
-      if (spot.errors) {
-        console.log('errors',spot.errors)
-        setErrors(spot.errors);
-      } else {
-      if(!spot.id){
+      ...spot,
+      country, 
+      address, 
+      city, 
+      state, 
+      lat, 
+      lng, 
+      description, 
+      name, 
+      price};
+      
+      if(formType === 'Create a Spot'){
+        if(!previewImgUrl){
+          errors.previewImage = 'Preview image is required'
+          setNoPreviewImgUrl(true)
+        }
+        if(previewImgUrl && (!(previewImgUrl.endsWith('.png')||previewImgUrl.endsWith('.jpg')||previewImgUrl.endsWith('.jpeg')))){
+          errors.url1 = 'Image must end with .png, .jpg, .jpeg'
+          setImageFormat(true)
+        }
+        if(imageUrl1 && (!(imageUrl1.endsWith('.png')||imageUrl1.endsWith('.jpg')||imageUrl1.endsWith('.jpeg')))){
+          errors.url2 = 'Image must end with .png, .jpg, .jpeg'
+          setImageFormat(true)
+        }
+        if(imageUrl2 && (!(imageUrl2.endsWith('.png')||imageUrl2.endsWith('.jpg')||imageUrl2.endsWith('.jpeg')))){
+          errors.url3 = 'Image must end with .png, .jpg, .jpeg'
+          setImageFormat(true)
+        }
+        if(imageUrl3 && (!(imageUrl3.endsWith('.png')||imageUrl3.endsWith('.jpg')||imageUrl3.endsWith('.jpeg')))){
+          errors.url4 = 'Image must end with .png, .jpg, .jpeg'
+          setImageFormat(true)
+        }
+        if(imageUrl4 && (!(imageUrl4.endsWith('.png')||imageUrl4.endsWith('.jpg')||imageUrl4.endsWith('.jpeg')))){
+          errors.url5 = 'Image must end with .png, .jpg, .jpeg'
+          setImageFormat(true)
+        }
+        if (Object.values(errors).length > 0) {
+          return
+        }else{
+        const newSpot = await dispatch(createSpot(spot));
+        spot = newSpot;
+        if(spot.errors){
+          errors.spot = spot.errors
+        }
+        if (Object.values(errors).length > 0) {
+          setErrors(errors);
+        }
+        if(!spot.id){
         return null
       }
       const newPreview = await dispatch(postImage(spot.id, previewImgUrl, true))
-      const newImage1 = await dispatch(postImage(spot.id, imageUrl1, false))
-      const newImage2 = await dispatch(postImage(spot.id, imageUrl2, false))
-      const newImage3 = await dispatch(postImage(spot.id, imageUrl3, false))
-      const newImage4 = await dispatch(postImage(spot.id, imageUrl4, false))
+      if(imageUrl1)  await dispatch(postImage(spot.id, imageUrl1, false))
+      if(imageUrl2) await dispatch(postImage(spot.id, imageUrl2, false))
+      if(imageUrl3) await dispatch(postImage(spot.id, imageUrl3, false))
+      if(imageUrl4) await dispatch(postImage(spot.id, imageUrl4, false))
         history.push(`/spots/${spot.id}`);
-      }
+    }
     }else if(formType === 'Update your Spot'){
       const updatedSpot = await dispatch(updateSpot(spot));
       history.push(`/spots/${spot.id}`);
@@ -91,7 +119,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setCountry(e.target.value)}
             />
         </label>
-        {errors.country && <p>{errors.country}</p>}
+        {errors.spot && <p>{errors.spot.country}</p>}
         <label>
             Street address
             <input
@@ -101,7 +129,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setAddress(e.target.value)}
             />
         </label>
-        {errors.address && <p>{errors.address}</p>}
+        {errors.spot && <p>{errors.address}</p>}
         <label>
             City
             <input
@@ -111,7 +139,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setCity(e.target.value)}
             />
         </label>
-        {errors.city && <p>{errors.city}</p>}
+        {errors.spot && <p>{errors.spot.city}</p>}
         <label>
             State
             <input
@@ -121,7 +149,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setState(e.target.value)}
             />
         </label>
-        {errors.state && <p>{errors.state}</p>}
+        {errors.spot && <p>{errors.spot.state}</p>}
         <label>
             Latitude 
             <input
@@ -131,7 +159,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setLat(e.target.value)}
             />
         </label>
-        {errors.lat && <p>{errors.lat}</p>}
+        {errors.spot && <p>{errors.spot.lat}</p>}
         <label>
             Longitude 
             <input
@@ -141,7 +169,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setLng(e.target.value)}
             />
         </label>
-        {errors.lng && <p>{errors.lng}</p>}
+        {errors.spot && <p>{errors.spot.lng}</p>}
         <label>
             <h3>Describe your place to guests</h3>
             <p>Mention the best features of your space, any special amendities like fast wifi or parking, and what you love about the neighborhood</p>
@@ -151,7 +179,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setDescription(e.target.value)}
             />
         </label>
-        {errors.description && <p>{errors.description}</p>}
+        {errors.spot && <p>{errors.spot.description}</p>}
         <label>
             <h3>Create a title for your spot</h3>
             <p>Catch guests' attention with a spot title that highlights what makes your place special</p>
@@ -162,7 +190,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setName(e.target.value)}
             />
         </label>
-        {errors.name && <p>{errors.name}</p>}
+        {errors.spot && <p>{errors.spot.name}</p>}
         <label>
             <h3>Set a price based on a spot</h3>
             <p>Competitive pricing can help your listing stand out and rank higher in search results</p>
@@ -173,7 +201,8 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setPrice(e.target.value)}
             />
         </label>
-        {errors.price && <p>{errors.price}</p>}
+        {errors.spot && <p>{errors.spot.price}</p>}
+        {formType==='Create a Spot' &&
         <label>
             <h3>Liven up your spot with photos</h3>
             <p>Submit a link to at least one photo to publish your spot</p>
@@ -183,13 +212,16 @@ const SpotForm = ({ spot, formType }) => {
             placeholder='Preview Image URL'
             onChange={(e) => setPreviewImageUrl(e.target.value)}
             />
-            {errors.previewImage && <p>{errors.previewImage}</p>}
+            {noPreviewImgUrl && <p>Preview image is required</p>}
+            {imageFormat && <p>Image must end in .png, .jpg, or .jpeg</p>}
+            {errors.url && <p>{errors.url}</p>}
             <input
             value={imageUrl1}
             type='text'
             placeholder='Image URL'
             onChange={(e) => setImageUrl1(e.target.value)}
             />
+            {errors.url && <p>{errors.url}</p>}
             <input
             value={imageUrl2}
             type='text'
@@ -209,6 +241,7 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setImageUrl4(e.target.value)}
             />
         </label>
+        }
         <button type='submit'>{submitText}</button>
 
     </form>

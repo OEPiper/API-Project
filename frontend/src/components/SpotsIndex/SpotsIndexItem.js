@@ -4,9 +4,7 @@ import './SpotsIndex.css'
 
 const SpotIndexItem = ({spot}) => {
     
-    if(!spot.avgRating){
-        spot.avgRating = 'New'
-    }
+    
     if(Number.isInteger(spot.avgRating)){
         spot.avgRating = spot.avgRating.toFixed(1)
     }
@@ -18,8 +16,8 @@ const SpotIndexItem = ({spot}) => {
         <li>
             <img className='spot-img' src={spot.previewImage} />
             <p>{spot.city}, {spot.state}</p>
-            <p><i class="fa-solid fa-star"></i>{spot.avgRating}</p>
-            <p>${spot.price} per night</p>
+            {spot.avgRating ? (<p><i class="fa-solid fa-star"></i>{spot.avgRating} {'\u2022'} ${spot.price} per night</p>):
+            (<p><i class="fa-solid fa-star"></i>New ${spot.price} per night</p>)}
         </li>
     )
 }

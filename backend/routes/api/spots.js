@@ -217,6 +217,7 @@ router.get('/:spotId/reviews', async(req,res) => {
     where: {
       spotId: spotId
     },
+    //order: [['createdAt', 'DESC']],
     include: [
       {model: User, attributes: ['id', 'firstName', 'lastName']},
       {model: ReviewImage, attributes: ['id', 'url']}

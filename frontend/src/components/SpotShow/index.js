@@ -44,7 +44,6 @@ const SpotShow = () => {
             extraImages.push(spot.SpotImages[i])
         }
     }
-    console.log(extraImages)
    
     return (
         <div>

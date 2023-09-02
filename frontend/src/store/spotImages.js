@@ -8,17 +8,18 @@ export const recieveImage = (image) => ({
 });
 
 export const postImage = (spotId, url, preview) => async (dispatch) =>{
+    try{
     const res = await csrfFetch(`/api/spots/${spotId}/images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({url, preview})
     });
-    if(res.ok){
+    
         const newImage = await res.json();
         dispatch(recieveImage(newImage))
         return newImage
-    }else{
-        const errors = res.json();
+    }catch(err){
+        const errors = err.json();
         return errors
     }
 };

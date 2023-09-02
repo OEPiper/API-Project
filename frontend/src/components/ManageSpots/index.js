@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { fetchUserSpots } from "../../store/spots";
 import SpotIndexItem from "../SpotsIndex/SpotsIndexItem";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import DeleteSpotModal from "./DeleteSpotModal";
 
 const ManageSpots = () => {
     const spotsList = useSelector((state) => (state.spots ? state.spots : []));
@@ -32,7 +34,10 @@ const ManageSpots = () => {
                      <SpotIndexItem spot={spot} key={spot.id}/>
                     </Link>
                     <button onClick={() => history.push(`/spots/${spot.id}/edit`)}>Update</button>
-                    <button>Delete</button>
+                    <button><OpenModalMenuItem
+                    itemText='Delete'
+                    modalComponent={<DeleteSpotModal spot={spot}/>}/>
+                    </button>
                     </li>
                 ))}
             </ul>
