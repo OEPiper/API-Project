@@ -6,6 +6,7 @@ import { fetchSpotReviews } from "../../store/reviews";
 import './ReviewsForSpot.css';
 import CreateReviewModal from "./CreateReviewModal";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import DeleteReviewModal from "./DeleteReviewModal";
 
 const ReviewsForSpot = ({spot}) =>{
     const reviewsList = useSelector((state) => (state.reviews ? state.reviews : []));
@@ -70,6 +71,9 @@ const ReviewsForSpot = ({spot}) =>{
                     <p>{review.User.firstName} {review.User.lastName}</p>
                     <p>{getMonth(review.createdAt)} {getYear(review.createdAt)}</p>
                     <p>{review.review}</p>
+                    {review.userId === sessionUser?.id && <button><OpenModalMenuItem
+                    itemText='Delete Review'
+                    modalComponent={<DeleteReviewModal review={review}/>}/></button>}
                     </li>
                 ))}
             </ul>

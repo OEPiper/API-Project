@@ -21,7 +21,7 @@ module.exports = {
     */
    await Review.bulkCreate([
     {
-      userId: 1,
+      userId: 2,
       spotId: 1,
       review: "This was an awesome spot!",
       stars: 5,

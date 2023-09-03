@@ -115,9 +115,9 @@ const spotsReducer = (state = initialState, action) => {
             return { ...state, [action.spot.id]: action.spot };
         case UPDATE_SPOT:
             return { ...state, [action.spot.id]: action.spot };
-        case RECIEVE_SPOT:
+        case REMOVE_SPOT:
             const newState = {...state};
-            delete newState[action.reportId];
+            delete newState[action.spotId];
             return newState
         default:
             return state
