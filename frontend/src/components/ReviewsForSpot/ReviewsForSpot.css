@@ -1,0 +1,7 @@
+.rating-input .filled {
+    color: gold;
+  }
+  
+  .rating-input .empty {
+    color: grey;
+  }

@@ -377,7 +377,6 @@ router.get('/:spotId', async(req,res) => {
       spot.numReviews = spot.Reviews.length
       spot.avgRating = starAvg
       spot.Owner = spot.User
-      delete spot.Reviews
       delete spot.User
    
     

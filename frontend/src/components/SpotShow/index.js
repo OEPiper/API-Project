@@ -9,12 +9,17 @@ const SpotShow = () => {
     const {spotId} = useParams();
     let review = 'reviews';
     let newReview = ''
+    let postReview = ''
+    const sessionUser = useSelector(state => state.session.user);
     const spot = useSelector((state) =>
     state.spots ? state.spots[spotId] : null );
-  const dispatch = useDispatch();
-  useEffect(() => {
-      dispatch(fetchSpotDetails(spotId))
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchSpotDetails(spotId))
     },[dispatch, spotId]);
+    useEffect(() => {})
+    console.log(spot)
+    
     if(!spot){
         return null
     }
@@ -74,7 +79,8 @@ const SpotShow = () => {
                 <h2><i class="fa-solid fa-star"></i>{spot.avgRating}</h2>  
                 <h2>{spot.numReviews} {review}</h2>
                 <ReviewsForSpot spot={spot}/>
-                <p>{newReview}</p>
+                {/* <p>{newReview}</p> */}
+
             </div>
         </div>
     )
