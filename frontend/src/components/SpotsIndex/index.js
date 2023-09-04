@@ -22,9 +22,11 @@ const SpotsIndex = () => {
         <section>
             <ul className="spot-list">
                 {spots.map((spot) => (
+                    <div title={spot.name}>
                     <Link exact to={`/spots/${spot.id}`}>
                      <SpotIndexItem spot={spot} key={spot.id}/>
                     </Link>
+                    </div>
                 ))}
             </ul>
         </section>

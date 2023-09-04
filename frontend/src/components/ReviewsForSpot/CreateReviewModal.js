@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux";
 import { createReview } from "../../store/reviews";
 import { useModal } from "../../context/Modal";
@@ -10,8 +10,18 @@ const CreateReviewModal = ({spot}) =>{
     const [errors, setErrors] = useState({});
     const [starErr, setStarErr] = useState(false);
     const [reviewErr, setReviewErr] = useState(false);
+    const [disable, setDisable] = useState(false);
     const dispatch = useDispatch();
-    const {closeModal} = useModal()
+    const {closeModal} = useModal();
+
+    useEffect(() => {
+      if(review.length < 10 || stars < 1){
+        setDisable(true)
+      }else{
+        setDisable(false)
+      }
+    },[review, stars, disable])
+
     const handleSubmit = async (e) =>{
         e.preventDefault();
         setErrors({});
@@ -32,8 +42,8 @@ const CreateReviewModal = ({spot}) =>{
             return
         }else{
             dispatch(createReview(reviewPayload, spot.id))
-            dispatch(fetchSpotReviews(spot.id))
-            closeModal();
+            .then(dispatch(fetchSpotReviews(spot.id)))
+            .then(closeModal());
             window.location.reload()
             
             
@@ -95,7 +105,7 @@ const CreateReviewModal = ({spot}) =>{
         <i className="fa-solid fa-star"></i>
       </div>
     </div>
-            <button type='submit' >Submit your review</button>
+            <button type='submit' disabled={disable} >Submit your review</button>
         </form>
     )
 }

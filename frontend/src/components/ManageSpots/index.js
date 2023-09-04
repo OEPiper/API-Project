@@ -29,7 +29,7 @@ const ManageSpots = () => {
             </Link>
             <ul className="spot-list">
                 {spots.map((spot) => (
-                    <li>
+                    <li title={spot.name}>
                     <Link exact to={`/spots/${spot.id}`}>
                      <SpotIndexItem spot={spot} key={spot.id}/>
                     </Link>

@@ -13,8 +13,8 @@ const DeleteReviewModal = ({review}) =>{
     console.log(review)
     const handleDelete = (e) => {
         e.preventDefault();
-        dispatch(deleteReview(review.id));
-        closeModal();
+        dispatch(deleteReview(review.id))
+        .then(closeModal());
         window.location.reload()
     }
     
