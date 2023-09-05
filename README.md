@@ -1,4 +1,6 @@
 # API Project
+## Intro
+Welcome to AirBnotB!
 
 ## Database Scheme Design
 
