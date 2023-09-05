@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReviewsForSpot from '../ReviewsForSpot';
 import { fetchSpotDetails } from '../../store/spots';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import CreateReviewModal from '../ReviewsForSpot/CreateReviewModal';
+import { fetchSpotReviews } from '../../store/reviews';
 import './SpotShow.css'
 
 const SpotShow = () => {
@@ -13,12 +16,14 @@ const SpotShow = () => {
     const sessionUser = useSelector(state => state.session.user);
     const spot = useSelector((state) =>
     state.spots ? state.spots[spotId] : null );
+    const reviews = useSelector((state) => (state.reviews ? state.reviews : []));
     const dispatch = useDispatch();
+    const [reviewBtn, setReviewBtn] = useState(true)
     useEffect(() => {
-        dispatch(fetchSpotDetails(spotId))
-    },[dispatch, spotId]);
-    useEffect(() => {})
-    console.log(spot)
+        dispatch(fetchSpotReviews(spotId))
+        .then(dispatch(fetchSpotDetails(spotId)))
+    },[dispatch, spotId, reviews.length]);
+    
     
     if(!spot){
         return null
@@ -26,6 +31,9 @@ const SpotShow = () => {
     if(!spot.SpotImages){
         return null
     }
+    // if(!spot.reviews){
+    //     return null
+    // }
     if(!spot.avgRating){
         spot.avgRating = 'New'
     }
@@ -50,13 +58,14 @@ const SpotShow = () => {
         }
     }
    
+   
     return (
-        <div>
+        <div className='spot-details'>
             <h1>{spot.name}</h1>
             <p>{spot.city}, {spot.state}, {spot.country}</p>
-            <div>
+            <div className='spot-images'>
                 <img className='feature-img' src={previewImage.url}/> 
-                <ul>
+                <ul className='misc-images'>
 
                 {extraImages.map((image) =>(
                     <li>
@@ -65,22 +74,30 @@ const SpotShow = () => {
                     ))}
                 </ul>
             </div>
-            <div>
+            <div className='details'>
+                <div className='host'>
             <h2>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h2>
             <p>{spot.description}</p>
-            <div>
+                </div>
+            <div className='reservation'>
+                <div className='price-reviews'>
                 <p>${spot.price} night</p>
+                <div className='review-details'>
                 <p><i class="fa-solid fa-star"></i>{spot.avgRating}</p> 
-                <p> {spot.numReviews} {review}</p>
-
+                {spot.numReviews > 0 &&<p>{'\u2022'} {spot.numReviews} {review}</p>}
+                </div>
+                </div>
+                <button onClick={() => alert('Feature coming soon!')}>Reserve</button>
             </div>
             </div>
             <div>
+                <div className='guest-reviews'>
                 <h2><i class="fa-solid fa-star"></i>{spot.avgRating}</h2>  
-                <h2>{spot.numReviews} {review}</h2>
+                {spot.numReviews > 0 && <h2>{'\u2022'} {spot.numReviews} {review}</h2>}
+                </div>
                 <ReviewsForSpot spot={spot}/>
-                {/* <p>{newReview}</p> */}
-
+                
+                
             </div>
         </div>
     )

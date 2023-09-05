@@ -13,11 +13,16 @@ const SpotIndexItem = ({spot}) => {
     }
     
     return (
-        <li>
+        <li className='spot-tile'>
             <img className='spot-img' src={spot.previewImage} />
+            <div>
+                <div>
             <p>{spot.city}, {spot.state}</p>
-            {spot.avgRating ? (<p><i class="fa-solid fa-star"></i>{spot.avgRating} {'\u2022'} ${spot.price} per night</p>):
-            (<p><i class="fa-solid fa-star"></i>New ${spot.price} per night</p>)}
+            {spot.avgRating ? (<p><i class="fa-solid fa-star"></i>{spot.avgRating}</p> ):
+            (<p><i class="fa-solid fa-star"></i>New</p>)}
+                </div>
+            <p>${spot.price} per night</p>
+            </div>
         </li>
     )
 }

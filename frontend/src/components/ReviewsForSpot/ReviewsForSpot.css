@@ -5,3 +5,87 @@
   .rating-input .empty {
     color: grey;
   }
+   .post-review{
+      list-style-type: none;
+      padding: 5px 20px;
+      background-color: gray;
+      color: white;
+      box-shadow: 2px 2px 2px black;
+      border: 1px solid black;
+   }
+
+   .guest-name{
+    font-weight: bold;
+    font-size: 18px;
+   }
+
+   .review-date{
+    color: gray;
+    font-size: 12px;
+   }
+
+   .delete-review{
+    padding: 5px 20px;
+    background-color: gray;
+      color: white;
+      box-shadow: 2px 2px 2px black;
+      border: 1px solid black;
+   }
+   
+   .review-item{
+    padding-bottom: 10px;
+   }
+   .create-review{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:450px;
+   }
+
+   .rating-input {
+    display: flex;
+   }
+
+   .create-review textarea{
+    width: 350px;
+    height: 125px;
+    margin-bottom: 15px;
+    background-color: #E8F0FE;
+   }
+
+   .rating-input p{
+    margin-top: 0;
+   }
+
+   .create-review button{
+    margin-bottom: 15px;
+    padding: 10px 120px;
+    background-color: #eb4a50;
+    border: solid black;
+    color: white;
+    box-shadow: 5px 5px 2px black;
+   }
+
+   .create-review button:disabled{
+    background-color: white;
+    color: lightgray;
+    border: solid lightgray;
+    box-shadow: 5px 5px 2px lightgray;
+   }
+
+   .delete-modal {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    align-items: center;
+}
+
+.delete-modal p {
+    margin-top: 0;
+}
+
+.delete-modal button{
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 275px;
+}

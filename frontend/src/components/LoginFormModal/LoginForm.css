@@ -1,0 +1,51 @@
+.log-in{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    width: 450px;
+    box-sizing: border-box;
+}
+
+.log-in form {
+    display: flex;
+    flex-direction: column;
+}
+
+.log-in form label {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding-bottom: 20px;
+}
+
+.log-in form button {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #eb4a50;
+    border: solid black;
+    color: white;
+    box-shadow: 5px 5px 2px black;
+}
+
+.log-in form button:disabled{
+    background-color: white;
+    color: lightgray;
+    border: solid lightgray;
+    box-shadow: 5px 5px 2px lightgray;
+}
+
+.log-in a {
+    text-align: center;
+    text-decoration: none;
+    color: teal;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.log-in form label input {
+    border: solid;
+    background-color: #E8F0FE;
+    height: 20px;
+    border-radius: 0;
+}

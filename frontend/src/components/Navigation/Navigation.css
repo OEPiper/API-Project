@@ -1,13 +1,91 @@
-ul {
-    display: flex;
-    justify-content: space-between;
-}
+
 
 .hidden {
     display: none;
 }
 
-ul li ul{
+
+.airbnb {
+    width: 50px;
+    height: 50px;
+    rotate: 180deg;
+}
+
+.nav-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid rgb(155, 154, 154);
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding-bottom: 15px;
+    padding-top: 10px;
+}
+
+.menu-btn{
+    display: flex;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 30px;
+    background-color: white;
+}
+.profile-dropdownshow {
+    position: absolute;
     display:flex;
     flex-direction: column;
+    border: 1px solid;
+    right: 20px;
+    background-color: white;
+    align-content: center;
+    padding: 10px;
+    gap: 5px;
+    border-radius: 5px;
+}
+.manage-link{
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.manage-link a {
+    text-decoration: none;
+    color: black;
+}
+
+.profile-dropdown button {
+    background-color: grey;
+    color: white;
+    margin-left: 10px;
+    padding: 8px 8px;
+    border-radius: 15px;
+}
+.create-new-spot a{
+    text-decoration: none;
+    font-weight: bold;
+    color: teal;
+    font-family: sans-serif;
+}
+
+.logo a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+    color: #eb4a50;
+}
+
+.logout {
+    padding: 8px 10px;
+    margin-left: 15px;
+    background-color: gray;
+    color: white;
+    border-radius: 15px;
 }

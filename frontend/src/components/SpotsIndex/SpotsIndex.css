@@ -1,10 +1,30 @@
 .spot-list {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
+    gap: 20px;
+    max-width: 1000px;
 }
 
 .spot-img {
     display: flex;
-    width: 450px;
-    height: 450px;
+    width: 225px;
+    height: 225px;
+    border-radius: 10px;
+}
+
+.spot-tile div{
+    display: flex;
+    flex-direction: column; 
+}
+
+.spot-tile div div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.spot-list div a{
+    text-decoration: none;
+    color: black;
 }

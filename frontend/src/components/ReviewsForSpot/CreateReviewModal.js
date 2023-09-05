@@ -52,7 +52,7 @@ const CreateReviewModal = ({spot}) =>{
 
     }
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='create-review'>
             <h2>How was your stay?</h2>
             {reviewErr && <p>'Review must be atleast 10 characters long'</p>}
             {starErr && <p>'Review must have atleast one star'</p>}
@@ -63,7 +63,7 @@ const CreateReviewModal = ({spot}) =>{
             onChange={(e) => setReview(e.target.value)}/>
             </label>
     <div className="rating-input">
-        <h3>Stars</h3>
+       
       <div
         className={stars >= 1 ? "filled" : "empty"}
         onMouseEnter={() => {  setStars(1)} }
@@ -104,6 +104,7 @@ const CreateReviewModal = ({spot}) =>{
       >
         <i className="fa-solid fa-star"></i>
       </div>
+      <p>Stars</p>
     </div>
             <button type='submit' disabled={disable} >Submit your review</button>
         </form>

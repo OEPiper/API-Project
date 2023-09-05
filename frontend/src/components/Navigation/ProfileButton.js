@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
@@ -8,6 +8,7 @@ import SignupFormModal from '../SignupFormModal';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
   const openMenu = () => {
@@ -35,13 +36,17 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    history.push('/')
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown" + (showMenu ? "show" : " hidden");
 
   return (
     <>
-      <button onClick={openMenu}>
+      <button onClick={openMenu} className="menu-btn">
+        <div>
+        <i class="fa-solid fa-bars"></i>
+        </div>
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
@@ -49,13 +54,13 @@ function ProfileButton({ user }) {
           <>
             <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
-            <li>
+            <li className="manage-link">
               <Link exact to='/spots/current'>
                 Manage Spots
               </Link>
             </li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button onClick={logout} className="logout">Log Out</button>
             </li>
           </>
         ) : (

@@ -1,0 +1,107 @@
+.spot-form{
+    display: flex;
+    flex-direction: column;
+    margin-left: 350px;
+    margin-right: 250px;
+}
+
+.other-inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 5px;
+}
+
+.spot-form p {
+    margin-top: 0;
+}
+
+.spot-form label input {
+    height: 20px;
+    background-color: #E8F0FE;
+}
+.city-state {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding-top: 5px;
+}
+.city-state input {
+    display: flex;
+    flex-direction: column;
+}
+
+.city input{
+    width: 310px;
+}
+
+.city-state p {
+    display: flex;
+    align-items: flex-end;
+}
+
+.state input{
+    width: 70px;
+}
+
+.lat-lng {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding-top: 5px;
+}
+
+.lat-lng input {
+    width: 190px;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 15px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding-bottom: 15px;
+}
+
+.description textarea {
+    background-color: #E8F0FE;
+    height: 150px;
+}
+
+.price {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 15px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding-bottom: 15px;
+}
+
+.submit-button {
+    margin-top: 20px;
+    background-color: #eb4a50;
+    color: white;
+    padding: 5px 15px;
+    box-shadow: 2px 2px 2px black;
+    border: solid black;
+}
+
+.submit-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.create-imgs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 5px;
+    border-bottom: 2px solid black;
+    padding-bottom: 15px;
+}

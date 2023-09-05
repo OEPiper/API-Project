@@ -1,0 +1,59 @@
+.manage-spots h2{
+    margin-left: 20px;
+}
+
+.manage-spots a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+.manage-spots a button{
+    background-color: gray;
+    color: white;
+    box-shadow: 2px 2px 2px black;
+    padding: 5px;
+}
+
+.manage-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.manage-buttons button {
+    background-color: gray;
+    color: white;
+    box-shadow: 2px 2px 2px black;
+    padding: 5px 10px;
+}
+
+.delete-spot {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    align-items: center;
+}
+
+.delete-spot p {
+    margin-top: 0;
+}
+
+.delete-spot button{
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 275px;
+}
+
+.confirm-delete {
+    background-color: #eb4a50;
+    color: white;
+    border:2px solid black;
+    box-shadow: 5px 5px 2px black;
+}
+
+.cancel-delete{
+    background-color: gray;
+    color: white;
+    border:2px solid black;
+    box-shadow: 5px 5px 2px black;
+}

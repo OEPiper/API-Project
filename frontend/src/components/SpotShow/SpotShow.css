@@ -1,11 +1,70 @@
 .feature-img {
     display: flex;
     width: 400px;
+    height: 410px;
 
 }
 
 .extra-img {
     display: flex;
-    height: 400px;
-    width: 400px;
+    height: 200px;
+    width: 275px;
+    
+}
+
+.spot-images{
+    display: flex;
+}
+
+.misc-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding-left: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.spot-details{
+    margin-left: 20px;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+    margin-top: 10px;
+    border-bottom: 2px solid;
+    padding-bottom: 20px;
+}
+
+.reservation {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 0 10px
+}
+
+.price-reviews{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+
+}
+
+.review-details{
+    display: flex;
+    gap: 5px;
+}
+
+.reservation button{
+    padding: 10px 100px;
+    color: white;
+    background-color: #eb4a50;
+    border: 1px black solid;
+    box-shadow: 2px 2px 2px black;
+}
+
+.guest-reviews {
+    display: flex;
+    gap: 10px;
 }

@@ -1,12 +1,13 @@
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-
+import { fetchSpotDetails } from "../../store/spots";
 import { fetchSpotReviews } from "../../store/reviews";
 import './ReviewsForSpot.css';
 import CreateReviewModal from "./CreateReviewModal";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import DeleteReviewModal from "./DeleteReviewModal";
+
 
 const ReviewsForSpot = ({spot}) =>{
     const reviewsList = useSelector((state) => (state.reviews ? state.reviews : []));
@@ -18,35 +19,38 @@ const ReviewsForSpot = ({spot}) =>{
         if(sessionUser){
         if(spot.ownerId === sessionUser.id){
             setReviewBtn(false)
-        }
-    }
-    if(!sessionUser){
+        }else if(reviews.filter((review) => review.userId === sessionUser.id).length > 0){
+           setReviewBtn(false)
+       }
+    }else if(!sessionUser){
         setReviewBtn(false)
+    }else{
+        setReviewBtn(true)
     }
-    },[spot.ownerId, reviewBtn])
-    useEffect(() =>{
-        if(sessionUser){
+    },[spot.ownerId, reviewBtn, sessionUser, reviews.length])
+    // useEffect(() =>{
+    //     if(sessionUser){
             
-         if(reviews.filter((review) => review.userId === sessionUser.id).length > 0){
-            setReviewBtn(false)
-        }
-    }
-    },[reviews])
+    // }
+    // },[reviews, spot.id, sessionUser, reviewBtn])
     
     
     useEffect(() => {
         dispatch(fetchSpotReviews(spot.id))
-    },[dispatch, spot.id]);
-    
+        dispatch(fetchSpotDetails(spot.id))
+    },[dispatch, spot.id, sessionUser]);
+
     if(!reviews.length){
-        return (<>
-                {reviewBtn && <button><OpenModalMenuItem
-                    itemText='Post a Review'
-                    modalComponent={<CreateReviewModal spot={spot}/>}/></button>}
-                <p>
-                    Be the first to post a review!
-                </p>
-            </>)
+        return (<div className="first-review">
+        {spot.numReviews < 1 && reviewBtn && 
+        <button className="post-review"><OpenModalMenuItem
+            itemText='Post a Review'
+            modalComponent={<CreateReviewModal spot={spot}/>}/></button>}
+        {spot.numReviews < 1 &&<p>
+            Be the first to post a review!
+        </p>}
+    </div>)
+
     }
     const getYear = (reviewDate) => {
         let date = new Date(reviewDate)
@@ -62,17 +66,17 @@ const ReviewsForSpot = ({spot}) =>{
     
     return(
         <div>
-            {reviewBtn && <button><OpenModalMenuItem
+            {reviewBtn && <button className="post-review"><OpenModalMenuItem
                     itemText='Post a Review'
                     modalComponent={<CreateReviewModal spot={spot}/>}/></button>}
             <ul>
                 {sortedReviews.map((review) => (
-                    <li>   
-                    <p>{review.User.firstName} {review.User.lastName}</p>
-                    <p>{getMonth(review.createdAt)} {getYear(review.createdAt)}</p>
+                    <li className="review-item">   
+                    <p className="guest-name">{review.User.firstName} {review.User.lastName}</p>
+                    <p className="review-date">{getMonth(review.createdAt)} {getYear(review.createdAt)}</p>
                     <p>{review.review}</p>
-                    {review.userId === sessionUser?.id && <button><OpenModalMenuItem
-                    itemText='Delete Review'
+                    {review.userId === sessionUser?.id && <button className="delete-review"><OpenModalMenuItem
+                    itemText='Delete'
                     modalComponent={<DeleteReviewModal review={review}/>}/></button>}
                     </li>
                 ))}

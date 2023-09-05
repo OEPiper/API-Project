@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createSpot, updateSpot } from '../../store/spots';
 import { postImage } from '../../store/spotImages';
+import './CreateSpotForm.css'
 
 
 
@@ -106,11 +107,11 @@ const SpotForm = ({ spot, formType }) => {
     }
   
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='spot-form'>
       <h2>{formType}</h2>
       <p>Where's your place located?</p>
       <p>Guests will only know your exact address once they booked a reservation</p>
-        <label>
+        <label className='other-inputs'>
             Country
             <input
             type="text"
@@ -119,8 +120,8 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setCountry(e.target.value)}
             />
         </label>
-        {errors.spot && <p>{errors.spot.country}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.spot.country}</p>}
+        <label className='other-inputs'>
             Street address
             <input
             type='text'
@@ -129,18 +130,20 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setAddress(e.target.value)}
             />
         </label>
-        {errors.spot && <p>{errors.address}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.address}</p>}
+        <label className='city-state'>
+          <div className='city'>
             City
             <input
             type='text'
             placeholder='City'
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            />
-        </label>
-        {errors.spot && <p>{errors.spot.city}</p>}
-        <label>
+            />     
+        {errors.spot && <p className='errors'>{errors.spot.city}</p>}
+            </div>
+            <p>,</p>
+            <div className='state'>
             State
             <input
             type='text'
@@ -148,9 +151,12 @@ const SpotForm = ({ spot, formType }) => {
             value={state}
             onChange={(e) => setState(e.target.value)}
             />
+            </div>
         </label>
-        {errors.spot && <p>{errors.spot.state}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.spot.state}</p>}
+        <label className='lat-lng'>
+          <div>
+
             Latitude 
             <input
             type='number'
@@ -158,9 +164,11 @@ const SpotForm = ({ spot, formType }) => {
             value={lat}
             onChange={(e) => setLat(e.target.value)}
             />
-        </label>
-        {errors.spot && <p>{errors.spot.lat}</p>}
-        <label>
+        
+        {errors.spot && <p className='errors'>{errors.spot.lat}</p>}
+            </div>
+            <p>,</p>
+            <div>
             Longitude 
             <input
             type='number'
@@ -168,19 +176,20 @@ const SpotForm = ({ spot, formType }) => {
             value={lng}
             onChange={(e) => setLng(e.target.value)}
             />
+            </div>
         </label>
-        {errors.spot && <p>{errors.spot.lng}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.spot.lng}</p>}
+        <label className='description'>
             <h3>Describe your place to guests</h3>
             <p>Mention the best features of your space, any special amendities like fast wifi or parking, and what you love about the neighborhood</p>
             <textarea
-            placeholder='Description'
+            placeholder='Please write atleast 30 characters'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             />
         </label>
-        {errors.spot && <p>{errors.spot.description}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.spot.description}</p>}
+        <label className='other-inputs'>
             <h3>Create a title for your spot</h3>
             <p>Catch guests' attention with a spot title that highlights what makes your place special</p>
             <input
@@ -190,20 +199,22 @@ const SpotForm = ({ spot, formType }) => {
             onChange={(e) => setName(e.target.value)}
             />
         </label>
-        {errors.spot && <p>{errors.spot.name}</p>}
-        <label>
+        {errors.spot && <p className='errors'>{errors.spot.name}</p>}
+        <label className='price'>
             <h3>Set a price based on a spot</h3>
             <p>Competitive pricing can help your listing stand out and rank higher in search results</p>
+            <div>
             $<input
             type='number'
             placeholder='Price per night (USD)'
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             />
+            </div>
         </label>
-        {errors.spot && <p>{errors.spot.price}</p>}
+        {errors.spot && <p className='errors'>{errors.spot.price}</p>}
         {formType==='Create a Spot' &&
-        <label>
+        <label className='create-imgs'>
             <h3>Liven up your spot with photos</h3>
             <p>Submit a link to at least one photo to publish your spot</p>
             <input
@@ -212,16 +223,16 @@ const SpotForm = ({ spot, formType }) => {
             placeholder='Preview Image URL'
             onChange={(e) => setPreviewImageUrl(e.target.value)}
             />
-            {noPreviewImgUrl && <p>Preview image is required</p>}
-            {imageFormat && <p>Image must end in .png, .jpg, or .jpeg</p>}
-            {errors.url && <p>{errors.url}</p>}
+            {noPreviewImgUrl && <p className='errors'>Preview image is required</p>}
+            {imageFormat && <p className='errors'>Image must end in .png, .jpg, or .jpeg</p>}
+            {errors.url && <p className='errors'>{errors.url}</p>}
             <input
             value={imageUrl1}
             type='text'
             placeholder='Image URL'
             onChange={(e) => setImageUrl1(e.target.value)}
             />
-            {errors.url && <p>{errors.url}</p>}
+            {errors.url && <p className='errors'>{errors.url}</p>}
             <input
             value={imageUrl2}
             type='text'
@@ -242,7 +253,9 @@ const SpotForm = ({ spot, formType }) => {
             />
         </label>
         }
-        <button type='submit'>{submitText}</button>
+        <div className='submit-area'>
+        <button type='submit' className='submit-button'>{submitText}</button>
+        </div>
 
     </form>
   )
